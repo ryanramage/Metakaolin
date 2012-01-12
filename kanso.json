@@ -1,0 +1,9 @@
+{
+    "name": "metakaolin",
+    "version": "0.0.1",
+    "description": "Metakaolin is a commonly used starting material for laboratory synthesis of geopolymers.",
+    "url" : "https://github.com/ryanramage/Metakaolin",
+    "dependencies": {
+        "traditional-couchapp": null
+    }
+}
