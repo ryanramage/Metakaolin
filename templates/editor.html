@@ -27,8 +27,11 @@
         #doc_controls, .editing_shape #shape_controls { display: block; }
         
         .viewer { fill: grey; fill-opacity: 0.5; stroke: black; }
-        .viewer polyline { fill: none; }
-        .viewer .hover { fill-opacity: 0.25; }
+        .viewer polyline { fill: none !important; stroke-width: 3px; }
+        .viewer .hover { fill-opacity: 0.25; stroke-opacity: 0.75; }
+        .viewer .color0 { fill: red; stroke: red; }
+        .viewer .color1 { fill: green; stroke: green; }
+        .viewer .color2 { fill: blue; stroke: blue; }
     </style>
 </head>
 <body>
@@ -55,11 +58,22 @@
         var po = org.polymaps,
             map = po.map().container(d3.select('#map').append("svg:svg").node());
         map.add(po.interact());
+        
+        // TODO: properly attribute whichever layer is used
+        /*
         map.add(po.image()
             .url(po.url("http://{S}tile.cloudmade.com"
             + "/51664f123b50414da85e963f92c721f0"
             + "/998/256/{Z}/{X}/{Y}.png")
             .hosts(["a.", "b.", "c.", ""])));
+        */
+        map.add(po.image()
+            .url(po.url("http://oatile{S}.mqcdn.com/naip"
+            + "/{Z}/{X}/{Y}.jpg")
+            .hosts([1, 2, 3, 4])));
+        
+        
+        
         
         var vector = po_metakaolin_viewer(),
             editor = po_metakaolin_editor();
@@ -68,7 +82,6 @@
         d3.select(vector.container()).classed('viewer', true);
         vector.on('show', function (loadEvent) {
             loadEvent.features.forEach(function (f,i) {
-                var color = ["red", "green", "blue"][i%3];
                 d3.select(f.element).on("dblclick", function () {
                     d3.event.stopPropagation();
                     d3.event.preventDefault();
@@ -78,8 +91,7 @@
                     d3.select(this).classed('hover', true);
                 }).on("mouseout", function () {
                     d3.select(this).classed('hover', false);
-                }).style('fill', color).style('stroke', color);;
-                
+                }).classed('color' + (i % 3), true);
             });        
         });
         
